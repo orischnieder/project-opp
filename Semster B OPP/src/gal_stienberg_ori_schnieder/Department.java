@@ -1,0 +1,21 @@
+package gal_stienberg_ori_schnieder;
+
+public class Department {
+    private String name;
+    private int numOfStudents;
+    private Lecturer[] lecturersInDepartment;
+    private int lecturersInDepartmentNum;
+
+    public Department(String name, int numOfStudents) {
+        this.name = name;
+        this.numOfStudents = numOfStudents;
+        lecturersInDepartment = new Lecturer[0];
+    }
+
+    public String getName() {
+        return name;
+    }
+    public static boolean addLecturerToDepartment(Lecturer lecturer){
+
+    }
+}
