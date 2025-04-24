@@ -1,35 +1,34 @@
 package gal_stienberg_ori_schnieder;
+enum Degree{
+    FIRSTDEGREE , SECONDDEGREE, DOCTOR , PROFESSOR
+}
 
 public class Lecturer {
-    enum Degree{
-        FIRSTDEGREE , SECONDDEGREE, DOCTOR , PROFESSOR
-    }
+
     private String name;
-    private final String id;
+    private String id;
     private String degreeName;
     private double salary;
+    private Degree degree;
     private Department department;
     private Committee [] committeesPartOf;
     private int committeesPartOfNum;
 
-    public Lecturer( String name,String id, String degreeName, Department department, double salary) {
+    public Lecturer(String name,String id, String degreeName,Degree degree, double salary) {
         this.id = id;
         this.name = name;
         this.degreeName = degreeName;
-        this.department = department;
         this.salary = salary;
+        this.degree = degree;
     }
 
-    public void setDegreeName(String degreeName) {
+    public Lecturer(String name, String id, String degreeName, Degree degree, double salary, Department tempDepartment) {
+        this.id = id;
+        this.name = name;
         this.degreeName = degreeName;
-    }
-
-    public void setSalary(double salary) {
         this.salary = salary;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
+        this.degree = degree;
+        this.department = tempDepartment;
     }
 
     public String getName() {
