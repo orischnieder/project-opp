@@ -62,6 +62,18 @@ public class College {
         return SUCCESS;
     }
 
+    public Committee[] getCommitteeNames() {
+        return committeeNames;
+    }
+
+    public Lecturer[] getLecturerNames() {
+        return lecturerNames;
+    }
+
+    public Department[] getStudyDepartmentNames() {
+        return studyDepartmentNames;
+    }
+
     @Override
     public String toString() {
         return "College{" +

@@ -15,7 +15,7 @@ public class Department {
     public String getName() {
         return name;
     }
-    public CollegeActionStatus addLecturerToDepartment(Lecturer lecturer){
-
-    }
+//    public CollegeActionStatus addLecturerToDepartment(Lecturer lecturer){
+//
+//    }
 }

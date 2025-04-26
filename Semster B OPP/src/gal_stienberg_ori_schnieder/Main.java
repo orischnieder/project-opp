@@ -15,7 +15,7 @@ public class Main {
         s.close();
     }
 
-    private  void chooseOption() {
+    public static void chooseOption() {
         int userChoose;
         System.out.println("hello please enter your college name:");
         String collegeName = s.next();
@@ -27,12 +27,14 @@ public class Main {
                 case 0 -> System.out.println("bye bye and thank you");
                 case 1 ->addLecturer(college);
                 case 2 ->addCommittee();
-                case 3 ->addStudyDepartment(college);
-                case 4 -> System.out.println("this option is not available yet please select another one");
-                case 5 -> System.out.println("this option is not available yet please select another one");
-                case 6 -> System.out.println("this option is not available yet please select another one");
-                case 7 ->printLecturer();
-                case 8 ->printCommittee();
+                case 3 ->addCommitteeLecturer();
+                case 4 ->updateHeadOfCommittee();
+                case 5 ->removeLecturerCommittee();
+                case 6 ->addStudyDepartment(college);
+                case 7 ->averageSalaryCollege();
+                case 8 ->averageSalaryDepartment();
+                case 9 ->detailsLecturer(college);
+                case 10 ->detailsCommittee();
                 default -> System.out.println("invalid option please choose again");
             }
 
@@ -40,7 +42,37 @@ public class Main {
 
     }
 
-    public void addLecturer(College college) {
+    private static void detailsCommittee() {
+    }
+
+    private static void detailsLecturer(College college) {
+        Lecturer [] lecturers = college.getLecturerNames();
+        for (Lecturer lec:lecturers){
+            System.out.println(lec);
+        }
+    }
+
+    private static void averageSalaryDepartment() {
+    }
+
+    private static void averageSalaryCollege() {
+    }
+
+    private static void removeLecturerCommittee() {
+    }
+
+    private static void updateHeadOfCommittee() {
+    }
+
+    private static void addCommitteeLecturer() {
+    }
+
+    private static void printLecturer() {
+    }
+
+    public static void addLecturer(College college) {
+        // בדיקה של השם. בדיקה שך התואר.בדיקה של המחלקה
+        s.nextLine();
         System.out.println(" please enter lecturer name" );
         String name = s.nextLine();
         System.out.println(" please enter lecturer id" );
@@ -66,7 +98,7 @@ public class Main {
             lecturer = new Lecturer(name,id,degreeName,degree,salary,tempDepartment);
         }
 
-        college.addLecturer(lecturer);
+        System.out.println(college.addLecturer(lecturer));
     }
 
     private static void addCommittee() {
@@ -83,25 +115,23 @@ public class Main {
         System.out.println(" please enter the number of students in the department:");
         int numOfStudents = s.nextInt();
         Department department = new Department(name,numOfStudents);
-        college.addDepartment(department);
+        System.out.println(college.addDepartment(department));
     }
 
-
-
-
     private static void printMenu() {
-        System.out.println("Menu: ");
-        System.out.println("==========: ");
-        System.out.println(" 0) Exit ");
-        System.out.println(" 1) add a lecturer ");
-        System.out.println(" 2) add a committee ");
-        System.out.println(" 3) add a study department ");
-        System.out.println(" 4) not available yet ");
-        System.out.println(" 5) not available yet ");
-        System.out.println(" 6) not available yet ");
-        System.out.println(" 7) details of specific department ");
-        System.out.println(" 8) average salary of lecturers");
-        System.out.println(" 9) details of the lecturers ");
-        System.out.println("10) details of the committee ");
+        System.out.println("Menu: " +
+                        "\n==========: " +
+                        "\n 0) Exit " +
+                        "\n  1) Add a new lecturer " +
+                        "\n  2) Add a new committee" +
+                        "\n  3) Add a lecturer to a committee" +
+                        "\n  4) Update the head of a committee" +
+                        "\n  5) Remove a lecturer from a committee" +
+                        "\n  6) Add a new department" +
+                        "\n  7) Display the average salary of the lecturers in college " +
+                        "\n  8) Display the average salary of the lecturers in a specific department" +
+                        "\n  9) Display the full details of the lecturers" +
+                        "\n 10) Display the full details of all the committees" );
+
     }
 }
