@@ -1,6 +1,5 @@
 package gal_stienberg_ori_schnieder;
 
-import lesson5.Utils;
 
 import java.util.Arrays;
 
@@ -30,37 +29,69 @@ public class College {
         }
         return null;
     }
-    public CollegeActionStatus addLecturer(Lecturer lecturer) {
-        if (Utils.isExist(lecturerNames,numOfLecturers,lecturer)){
-            return LECTURER_EXIST;
+    public CollegeActionStatus checkIfExist(String name) {
+        for (int i = 0; i < numOfLecturers; i++) {
+            if (lecturerNames[i].getName().equals(name)){
+                return LECTURER_EXIST;
+            }
+        }
+        return SUCCESS;
+    }
+
+    public CollegeActionStatus addLecturer(String name, String id, double salary, String degreeName, Degree degree, String department) {
+        Lecturer lecturer;
+        Department tempDepartment = findDepartmentByName(department);
+        if (tempDepartment == null){
+            lecturer = new Lecturer(name,id,degreeName,degree,salary);
+        }
+        else {
+            lecturer = new Lecturer(name,id,degreeName,degree,salary,tempDepartment);
+            tempDepartment.addLecturerToDepartment(lecturer);
         }
         if (numOfLecturers == lecturerNames.length){
-            lecturerNames = (Lecturer[]) Utils.resizeArr(lecturerNames);
+            lecturerNames = (Lecturer[]) Util.resizeArr(lecturerNames);
         }
         lecturerNames[numOfLecturers++] = lecturer;
         return SUCCESS;
     }
-    public CollegeActionStatus addDepartment(Department department) {
-        if (Utils.isExist(studyDepartmentNames,numOfStudyDepartments,department)){
+    public CollegeActionStatus addDepartment(String name,int numOfStudents) {
+        Department department = new Department(name,numOfStudents);
+        if (Util.isExist(studyDepartmentNames,numOfStudyDepartments,department)){
             return DEPARTMENTS_EXIST;
         }
         if (numOfStudyDepartments == studyDepartmentNames.length){
-            studyDepartmentNames = (Department[]) Utils.resizeArr(studyDepartmentNames);
+            studyDepartmentNames = (Department[]) Util.resizeArr(studyDepartmentNames);
         }
         studyDepartmentNames[numOfStudyDepartments++] = department;
         return SUCCESS;
     }
 
-    public CollegeActionStatus addCommittee(Committee committee) {
-        if (Utils.isExist(committeeNames,numOfCommittees,committee)){
-            return COMMITTEE_EXIST;
+    public CollegeActionStatus addCommittee(String name,String headOfCommittee) {
+        Lecturer lecturer = findLecturerByName(headOfCommittee);
+        if (lecturer == null){
+            return LECTURER_NOT_EXIST;
+        } else if (lecturer.getDegree() == Degree.FIRSTDEGREE || lecturer.getDegree() == Degree.SECONDDEGREE) {
+            return DEGREE_NOT_VALID;
         }
+        Committee committee = new Committee(name,lecturer);
         if (numOfCommittees == committeeNames.length){
-            committeeNames = (Committee[]) Utils.resizeArr(committeeNames);
+            committeeNames = (Committee[]) Util.resizeArr(committeeNames);
         }
         committeeNames[numOfCommittees++] = committee;
         return SUCCESS;
     }
+
+    private Lecturer findLecturerByName(String name) {
+        for (int i = 0; i < numOfLecturers; i++) {
+            if (lecturerNames[i].getName().equals(name)) {
+                return lecturerNames[i];
+            }
+        }
+        return null;
+    }
+
+//    private Committee findCommitteeByName() {
+//    }
 
     public Committee[] getCommitteeNames() {
         return committeeNames;
@@ -82,5 +113,17 @@ public class College {
                 ", committeeNames=" + Arrays.toString(committeeNames) +
                 ", studyDepartmentNames=" + Arrays.toString(studyDepartmentNames) +
                 '}';
+    }
+
+    public int getNumOfLecturers() {
+        return numOfLecturers;
+    }
+
+    public int getNumOfCommittees() {
+        return numOfCommittees;
+    }
+
+    public int getNumOfStudyDepartments() {
+        return numOfStudyDepartments;
     }
 }

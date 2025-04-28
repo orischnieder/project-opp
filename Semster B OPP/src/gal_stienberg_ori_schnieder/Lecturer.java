@@ -46,17 +46,19 @@ public class Lecturer {
     public double getSalary() {
         return salary;
     }
-
+    public Degree getDegree(){
+        return degree;
+    }
     public Department getDepartment() {
         return department;
     }
     public String toString() {
-        return "Lecturer{" +
+        return "Lecturer[" +
                 "name='" + name + '\'' +
                 ", id=" + id +
                 ", degree='" + degreeName + '\'' +
                 ", department='" + department + '\'' +
                 ", salary=" + salary +
-                '}';
+                ']';
     }
 }

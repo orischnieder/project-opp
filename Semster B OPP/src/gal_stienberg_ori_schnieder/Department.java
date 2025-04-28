@@ -1,5 +1,7 @@
 package gal_stienberg_ori_schnieder;
 
+import java.util.Arrays;
+
 public class Department {
     private String name;
     private int numOfStudents;
@@ -11,6 +13,12 @@ public class Department {
         this.numOfStudents = numOfStudents;
         lecturersInDepartment = new Lecturer[0];
     }
+    public void addLecturerToDepartment(Lecturer lecturer) {
+        if (lecturersInDepartmentNum == lecturersInDepartment.length) {
+            lecturersInDepartment = (Lecturer[]) Util.resizeArr(lecturersInDepartment);
+        }
+        lecturersInDepartment[lecturersInDepartmentNum++] = lecturer;
+    }
 
     public String getName() {
         return name;
@@ -18,4 +26,9 @@ public class Department {
 //    public CollegeActionStatus addLecturerToDepartment(Lecturer lecturer){
 //
 //    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

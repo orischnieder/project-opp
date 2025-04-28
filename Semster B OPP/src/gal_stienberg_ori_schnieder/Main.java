@@ -1,5 +1,8 @@
 package gal_stienberg_ori_schnieder;
+import java.util.Objects;
 import java.util.Scanner;
+
+import static gal_stienberg_ori_schnieder.CollegeActionStatus.DEGREE_NOT_VALID;
 
 /*names: gal stienberg & ori schnieder
 * id gal:318915139
@@ -26,7 +29,7 @@ public class Main {
             switch (userChoose) {
                 case 0 -> System.out.println("bye bye and thank you");
                 case 1 ->addLecturer(college);
-                case 2 ->addCommittee();
+                case 2 ->addCommittee(college);
                 case 3 ->addCommitteeLecturer();
                 case 4 ->updateHeadOfCommittee();
                 case 5 ->removeLecturerCommittee();
@@ -47,8 +50,8 @@ public class Main {
 
     private static void detailsLecturer(College college) {
         Lecturer [] lecturers = college.getLecturerNames();
-        for (Lecturer lec:lecturers){
-            System.out.println(lec);
+        for (int i = 0; i < college.getNumOfLecturers(); i++) {
+            System.out.println(lecturers[i]);
         }
     }
 
@@ -72,40 +75,61 @@ public class Main {
 
     public static void addLecturer(College college) {
         // בדיקה של השם. בדיקה שך התואר.בדיקה של המחלקה
+        CollegeActionStatus check;
+        String name;
         s.nextLine();
-        System.out.println(" please enter lecturer name" );
-        String name = s.nextLine();
-        System.out.println(" please enter lecturer id" );
+        do {
+
+            System.out.println(" please enter lecturer name");
+            name = s.nextLine();
+            check = college.checkIfExist(name);
+            if (check != CollegeActionStatus.SUCCESS){
+                System.out.println(check);
+            }
+        } while (check != CollegeActionStatus.SUCCESS);
+        System.out.println(" please enter lecturer id");
         String id = s.nextLine();
-        System.out.println(" please enter lecturer salary" );
+        System.out.println(" please enter lecturer salary");
         double salary = s.nextDouble();
         s.nextLine();
-        System.out.println(" please enter lecturer degree name" );
+        System.out.println(" please enter lecturer degree name");
         String degreeName = s.nextLine();
         System.out.println("Please enter lecturer degree (choose from):");
         for (Degree d : Degree.values()) {
             System.out.println("- " + d);
         }
-        Degree degree = Degree.valueOf(s.next());
-        System.out.println(" please enter lecturer department" );
+        Degree degree = Degree.valueOf(s.next().toUpperCase());
+        s.nextLine();
+        System.out.println(" please enter lecturer department");
         String department = s.nextLine();
-        Department tempDepartment = college.findDepartmentByName(department);
-        Lecturer lecturer;
-        if (tempDepartment == null){
-            lecturer = new Lecturer(name,id,degreeName,degree,salary);
-        }
-        else {
-            lecturer = new Lecturer(name,id,degreeName,degree,salary,tempDepartment);
-        }
+        System.out.println(college.addLecturer(name,id,salary,degreeName,degree,department));
 
-        System.out.println(college.addLecturer(lecturer));
     }
 
-    private static void addCommittee() {
+    private static void addCommittee(College college) {
         s.nextLine();
         System.out.println(" please enter committee name:");
         String name = s.nextLine();
+        //בדיקה האם קיים
+        boolean check = false;
+        do {
+            System.out.println("please enter the name of the head of the committee:");
+            String headOfCommittee = s.nextLine();
+            System.out.println(college.addCommittee(name, headOfCommittee));
 
+            if (college.addCommittee(name, headOfCommittee) == DEGREE_NOT_VALID) {
+                System.out.println("do you wish to enter another name? yes/no?");
+                String userChoose = s.nextLine();
+                if (Objects.equals(userChoose, "yes")) {
+                    check = true;
+                } else {
+                    break;
+                }
+            }
+            else {
+                check = false;
+            }
+        }while (check);
     }
 
     private static void addStudyDepartment(College college) {
@@ -114,14 +138,13 @@ public class Main {
         String name = s.nextLine();
         System.out.println(" please enter the number of students in the department:");
         int numOfStudents = s.nextInt();
-        Department department = new Department(name,numOfStudents);
-        System.out.println(college.addDepartment(department));
+        System.out.println(college.addDepartment(name,numOfStudents));
     }
 
     private static void printMenu() {
         System.out.println("Menu: " +
                         "\n==========: " +
-                        "\n 0) Exit " +
+                        "\n  0) Exit " +
                         "\n  1) Add a new lecturer " +
                         "\n  2) Add a new committee" +
                         "\n  3) Add a lecturer to a committee" +
