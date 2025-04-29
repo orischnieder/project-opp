@@ -132,6 +132,7 @@ public class Main {
         }while (check);
     }
 
+
     private static void addStudyDepartment(College college) {
         s.nextLine();
         System.out.println(" please enter study department name:");

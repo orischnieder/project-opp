@@ -6,6 +6,7 @@ public class Committee {
     private Lecturer[] lecturerInCommittee;
     private int lecturerInCommitteeNum;
 
+
     public Committee(String name, Lecturer lecturer) {
         this.name = name;
         this.headOfCommittee =lecturer;

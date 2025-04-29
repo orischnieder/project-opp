@@ -93,6 +93,7 @@ public class College {
 //    private Committee findCommitteeByName() {
 //    }
 
+
     public Committee[] getCommitteeNames() {
         return committeeNames;
     }

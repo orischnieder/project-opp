@@ -15,6 +15,7 @@ public class Util {
         return false;
     }
 
+
     public static Object[] resizeArr(Object[] arr){
         return Arrays.copyOf(arr,arr.length == 0 ?2 : arr.length*2);
     }
