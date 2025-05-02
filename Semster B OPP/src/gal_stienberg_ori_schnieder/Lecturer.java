@@ -48,7 +48,7 @@ public class Lecturer {
                 "name='" + name + '\'' +
                 ", id=" + id +
                 ", degree='" + degreeName + '\'' +
-                ", degree type= "+ department + '\''+
+                ", degree type= "+ degree + '\''+
                 ", department='" + department + '\'' +
                 ", salary=" + salary +
                 ']';

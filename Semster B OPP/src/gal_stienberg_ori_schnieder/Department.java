@@ -20,12 +20,18 @@ public class Department {
         lecturersInDepartment[lecturersInDepartmentNum++] = lecturer;
     }
 
+    public int getLecturersInDepartmentNum() {
+        return lecturersInDepartmentNum;
+    }
+
+    public Lecturer[] getLecturersInDepartment() {
+        return lecturersInDepartment;
+    }
+
     public String getName() {
         return name;
     }
-//    public CollegeActionStatus addLecturerToDepartment(Lecturer lecturer){
-//
-//    }
+
 
 
     @Override

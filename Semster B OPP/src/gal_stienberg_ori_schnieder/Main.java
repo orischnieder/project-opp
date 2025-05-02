@@ -2,8 +2,7 @@ package gal_stienberg_ori_schnieder;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static gal_stienberg_ori_schnieder.CollegeActionStatus.DEGREE_NOT_VALID;
-import static gal_stienberg_ori_schnieder.CollegeActionStatus.SUCCESS;
+import static gal_stienberg_ori_schnieder.CollegeActionStatus.*;
 
 /*names: gal stienberg & ori schnieder
 * id gal:318915139
@@ -31,14 +30,14 @@ public class Main {
                 case 0 -> System.out.println("bye bye and thank you");
                 case 1 ->addLecturer(college);
                 case 2 ->addCommittee(college);
-                case 3 ->addCommitteeLecturer();
+                case 3 ->addCommitteeLecturer(college);
                 case 4 ->updateHeadOfCommittee();
                 case 5 ->removeLecturerCommittee();
                 case 6 ->addStudyDepartment(college);
                 case 7 ->averageSalaryCollege(college);
                 case 8 ->averageSalaryDepartment(college);
                 case 9 ->detailsLecturer(college);
-                case 10 ->detailsCommittee();
+                case 10 ->detailsCommittee(college);
                 default -> System.out.println("invalid option please choose again");
             }
 
@@ -46,39 +45,24 @@ public class Main {
 
     }
 
-    private static void detailsCommittee() {
+    private static void printMenu() {
+        System.out.println("Menu: " +
+                "\n==========: " +
+                "\n  0) Exit " +
+                "\n  1) Add a new lecturer " +
+                "\n  2) Add a new committee" +
+                "\n  3) Add a lecturer to a committee" +
+                "\n  4) Update the head of a committee" +
+                "\n  5) Remove a lecturer from a committee" +
+                "\n  6) Add a new department" +
+                "\n  7) Display the average salary of the lecturers in college " +
+                "\n  8) Display the average salary of the lecturers in a specific department" +
+                "\n  9) Display the full details of the lecturers" +
+                "\n 10) Display the full details of all the committees" );
+
     }
 
-    private static void detailsLecturer(College college) {
-        for (int i = 0; i < college.getNumOfLecturers(); i++) {
-            System.out.println(college.getLecturerNames()[i]);
-        }
-    }
 
-    private static void averageSalaryDepartment(College college) {
-        System.out.println("please choose a department please: ");
-        for (int i = 0; i < college.getNumOfStudyDepartments(); i++) {
-            System.out.println(college.getStudyDepartmentNames()[i]);
-        }
-        String name = s.nextLine();
-        System.out.println("The average salary of the lecturers in department"+ name + "is"+ + college.averageSalryAll());
-    }
-
-    private static void averageSalaryCollege(College college) {
-        System.out.println("The average salary of all the lecturers in the college is: "+ college.averageSalryAll());
-    }
-
-    private static void removeLecturerCommittee() {
-    }
-
-    private static void updateHeadOfCommittee() {
-    }
-
-    private static void addCommitteeLecturer() {
-    }
-
-    private static void printLecturer() {
-    }
 
     public static void addLecturer(College college) {
         // בדיקה של השם. בדיקה שך התואר.בדיקה של המחלקה
@@ -89,7 +73,7 @@ public class Main {
 
             System.out.println(" please enter lecturer name");
             name = s.nextLine();
-            check = college.checkIfExistLecturer(name);
+            check = Util.checkIfExistLecturer(college,name);
             if (check != SUCCESS){
                 System.out.println(check);
             }
@@ -121,7 +105,7 @@ public class Main {
 
             System.out.println(" please enter the committee name");
             name = s.nextLine();
-            checkName = college.checkIfExistCommittee(name);
+            checkName = Util.checkIfExistCommittee(college, name);
             if (checkName != SUCCESS){
                 System.out.println(checkName);
             }
@@ -147,6 +131,42 @@ public class Main {
         }while (checkHead);
     }
 
+    private static void addCommitteeLecturer(College college) {
+        Boolean check = false;
+        s.nextLine();
+        System.out.println(" please enter committee to add a lecturer:");
+        String nameCommittee = s.nextLine();
+        Committee checkName = college.findCommitteeByName(nameCommittee);
+        if (checkName == null) {
+            System.out.println("There is no committee with this name");
+//            בדיקה אם קיימת וועדה כזאתי
+            return;
+        }
+        do {
+            System.out.println("please enter the name of the lecturer you want to add to the Committee:");
+            String lecturerToAdd = s.nextLine();
+//            האם המרצה הזה הוא היו"ר
+            CollegeActionStatus result = Util.checkIfExistLecturer(college,lecturerToAdd);
+            if (result == SUCCESS) {
+                System.out.println("do you wish to enter another name? yes/no?");
+                String userChoose = s.nextLine();
+                if (userChoose.equals("yes")) {
+                    check = true;
+                } else {
+                    break;
+                }
+            }else {
+                System.out.println(college.addLecturerToCommittee(lecturerToAdd,checkName));
+            }
+        }while (check);
+
+    }
+
+    private static void updateHeadOfCommittee() {
+    }
+
+    private static void removeLecturerCommittee() {
+    }
 
     private static void addStudyDepartment(College college) {
         CollegeActionStatus check;
@@ -156,7 +176,7 @@ public class Main {
 
             System.out.println(" please enter department name");
             name = s.nextLine();
-            check = college.checkIfExistDepartment(name);
+            check = Util.checkIfExistDepartment(college,name);
             if (check != SUCCESS){
                 System.out.println(check);
             }
@@ -166,20 +186,34 @@ public class Main {
         System.out.println(college.addDepartment(name,numOfStudents));
     }
 
-    private static void printMenu() {
-        System.out.println("Menu: " +
-                        "\n==========: " +
-                        "\n  0) Exit " +
-                        "\n  1) Add a new lecturer " +
-                        "\n  2) Add a new committee" +
-                        "\n  3) Add a lecturer to a committee" +
-                        "\n  4) Update the head of a committee" +
-                        "\n  5) Remove a lecturer from a committee" +
-                        "\n  6) Add a new department" +
-                        "\n  7) Display the average salary of the lecturers in college " +
-                        "\n  8) Display the average salary of the lecturers in a specific department" +
-                        "\n  9) Display the full details of the lecturers" +
-                        "\n 10) Display the full details of all the committees" );
+    private static void averageSalaryCollege(College college) {
+        System.out.println("The average salary of all the lecturers in the college is: "+ college.averageSalryAll());
+    }
+
+    private static void averageSalaryDepartment(College college) {
+        s.nextLine();
+        System.out.println("please choose a department please: ");
+        for (int i = 0; i < college.getNumOfDepartments(); i++) {
+            System.out.println(college.getStudyDepartmentNames()[i]);
+        }
+        String name = s.nextLine();
+        if (Util.checkIfExistDepartment(college,name) == DEPARTMENTS_EXIST) {
+            System.out.println("The average salary of the lecturers in department" + name + "is: " + college.averageSalaryDepartment(name));
+        }else {
+            System.out.println(DEPARTMENTS_NOT_EXIST);
+        }
+    }
+
+    private static void detailsLecturer(College college) {
+        for (int i = 0; i < college.getNumOfLecturers(); i++) {
+            System.out.println(college.getLecturerNames()[i]);
+        }
+    }
+    private static void detailsCommittee(College college) {
+        for (int i = 0; i < college.getNumOfCommittees(); i++) {
+            System.out.println(college.getCommitteeNames()[i]);
+        }
 
     }
+
 }
