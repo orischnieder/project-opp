@@ -21,22 +21,6 @@ public class College {
         studyDepartmentNames = new Department[0];
 
     }
-    public Department findDepartmentByName(String name) {
-        for (int i = 0; i < numOfStudyDepartments; i++) {
-            if (studyDepartmentNames[i].getName().equals(name)) {
-                return studyDepartmentNames[i];
-            }
-        }
-        return null;
-    }
-    public CollegeActionStatus checkIfExist(String name) {
-        for (int i = 0; i < numOfLecturers; i++) {
-            if (lecturerNames[i].getName().equals(name)){
-                return LECTURER_EXIST;
-            }
-        }
-        return SUCCESS;
-    }
 
     public CollegeActionStatus addLecturer(String name, String id, double salary, String degreeName, Degree degree, String department) {
         Lecturer lecturer;
@@ -54,6 +38,7 @@ public class College {
         lecturerNames[numOfLecturers++] = lecturer;
         return SUCCESS;
     }
+
     public CollegeActionStatus addDepartment(String name,int numOfStudents) {
         Department department = new Department(name,numOfStudents);
         if (Util.isExist(studyDepartmentNames,numOfStudyDepartments,department)){
@@ -81,6 +66,17 @@ public class College {
         return SUCCESS;
     }
 
+
+
+    public Department findDepartmentByName(String name) {
+        for (int i = 0; i < numOfStudyDepartments; i++) {
+            if (studyDepartmentNames[i].getName().equals(name)) {
+                return studyDepartmentNames[i];
+            }
+        }
+        return null;
+    }
+
     private Lecturer findLecturerByName(String name) {
         for (int i = 0; i < numOfLecturers; i++) {
             if (lecturerNames[i].getName().equals(name)) {
@@ -90,9 +86,40 @@ public class College {
         return null;
     }
 
+    public CollegeActionStatus checkIfExistLecturer(String name) {
+        for (int i = 0; i < numOfLecturers; i++) {
+            if (lecturerNames[i].getName().equals(name)){
+                return LECTURER_EXIST;
+            }
+        }
+        return SUCCESS;
+    }
+    public CollegeActionStatus checkIfExistDepartment(String name) {
+        for (int i = 0; i < numOfStudyDepartments; i++) {
+            if (studyDepartmentNames[i].getName().equals(name)){
+                return DEPARTMENTS_EXIST;
+            }
+        }
+        return SUCCESS;
+    }
+    public CollegeActionStatus checkIfExistCommittee(String name) {
+        for (int i = 0; i < numOfCommittees; i++) {
+            if (committeeNames[i].getName().equals(name)){
+                return COMMITTEE_EXIST;
+            }
+        }
+        return SUCCESS;
+    }
+    public double averageSalryAll() {
+        double sum = 0;
+        for (int i = 0; i < numOfLecturers; i++) {
+            sum += lecturerNames[i].getSalary();
+        }
+        return sum / numOfLecturers;
+    }
+
 //    private Committee findCommitteeByName() {
 //    }
-
 
     public Committee[] getCommitteeNames() {
         return committeeNames;
@@ -106,15 +133,6 @@ public class College {
         return studyDepartmentNames;
     }
 
-    @Override
-    public String toString() {
-        return "College{" +
-                "name='" + name + '\'' +
-                ", lecturerNames=" + Arrays.toString(lecturerNames) +
-                ", committeeNames=" + Arrays.toString(committeeNames) +
-                ", studyDepartmentNames=" + Arrays.toString(studyDepartmentNames) +
-                '}';
-    }
 
     public int getNumOfLecturers() {
         return numOfLecturers;
@@ -127,4 +145,15 @@ public class College {
     public int getNumOfStudyDepartments() {
         return numOfStudyDepartments;
     }
+    @Override
+    public String toString() {
+        return "College{" +
+                "name='" + name + '\'' +
+                ", lecturerNames=" + Arrays.toString(lecturerNames) +
+                ", committeeNames=" + Arrays.toString(committeeNames) +
+                ", studyDepartmentNames=" + Arrays.toString(studyDepartmentNames) +
+                '}';
+    }
+
+
 }

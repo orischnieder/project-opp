@@ -36,13 +36,6 @@ public class Lecturer {
         return name;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getDegreeName() {
-        return degreeName;
-    }
 
     public double getSalary() {
         return salary;
@@ -50,14 +43,12 @@ public class Lecturer {
     public Degree getDegree(){
         return degree;
     }
-    public Department getDepartment() {
-        return department;
-    }
     public String toString() {
         return "Lecturer[" +
                 "name='" + name + '\'' +
                 ", id=" + id +
                 ", degree='" + degreeName + '\'' +
+                ", degree type= "+ department + '\''+
                 ", department='" + department + '\'' +
                 ", salary=" + salary +
                 ']';
