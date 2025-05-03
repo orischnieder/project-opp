@@ -1,7 +1,7 @@
 package gal_stienberg_ori_schnieder;
 
 public enum CollegeActionStatus {
-    GENERAL_ERROR("General Error"),
+    HEAD_OF_COMMITTEE("can't add because already head of committee"),
     SUCCESS("Success"),
     DEPARTMENTS_EXIST("Department already exist"),
     DEPARTMENTS_NOT_EXIST("Department not exist"),
@@ -9,7 +9,8 @@ public enum CollegeActionStatus {
     LECTURER_NOT_EXIST("lecturer not exist"),
     COMMITTEE_EXIST("committee already exist"),
     COMMITTEE_NOT_EXIST("committee not exist"),
-    DEGREE_NOT_VALID("you must be a doctor/professor");
+    DEGREE_NOT_VALID("you must be a doctor/professor"),
+    CAN_NOT_REMOVE("not possible to remove");
 
     private final String description;
 

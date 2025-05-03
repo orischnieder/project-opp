@@ -36,21 +36,34 @@ public class Lecturer {
         return name;
     }
 
-
     public double getSalary() {
         return salary;
     }
+
     public Degree getDegree(){
         return degree;
     }
+    @Override
     public String toString() {
-        return "Lecturer[" +
-                "name='" + name + '\'' +
-                ", id=" + id +
-                ", degree='" + degreeName + '\'' +
-                ", degree type= "+ degree + '\''+
-                ", department='" + department + '\'' +
-                ", salary=" + salary +
-                ']';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Lecturer Details: [");
+        sb.append("\"name: ").append(name).append("\", ");
+        sb.append("\"id: ").append(id).append("\", ");
+        sb.append("\"degree name: ").append(degreeName).append("\", ");
+        sb.append("\"degree type: ").append(degree).append("\", ");
+        sb.append("\"department: ").append(department != null ? department.getName() : "No Department").append("\", ");
+        sb.append("\"salary: ").append(salary).append("\", ");
+
+        sb.append("committees: [");
+        for (int i = 0; i < committeesPartOfNum; i++) {
+            sb.append("\"").append(committeesPartOf[i].getName()).append("\"");
+            if (i < committeesPartOfNum - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]]");
+
+        return sb.toString();
     }
+
 }
