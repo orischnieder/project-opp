@@ -37,7 +37,7 @@ public class College {
             lecturerNames = (Lecturer[]) Util.resizeArr(lecturerNames);
         }
         lecturerNames[numOfLecturers++] = lecturer;
-        return SUCCESS;
+        return tempDepartment == null ? SUCCESS_NO_DEPARTMENT : SUCCESS;
     }
 
     public CollegeActionStatus addDepartment(String name,int numOfStudents) {
@@ -53,7 +53,7 @@ public class College {
         Lecturer lecturer = findLecturerByName(headOfCommittee);
         if (lecturer == null){
             return LECTURER_NOT_EXIST;
-        } else if (lecturer.getDegree() == Degree.FIRSTDEGREE || lecturer.getDegree() == Degree.SECONDDEGREE) {
+        } else if (lecturer.getDegree() == FIRSTDEGREE || lecturer.getDegree() == Degree.SECONDDEGREE) {
             return DEGREE_NOT_VALID;
         }
         Committee committee = new Committee(name,lecturer);
@@ -70,13 +70,15 @@ public class College {
         if (committee == null) {
             return COMMITTEE_NOT_EXIST;
         }
-        if (Util.checkIfExistLecturer(this,nameLecturer) == SUCCESS){
+        if (lecturer == null){
             return LECTURER_NOT_EXIST;
         }
         if (lecturer.equals(committee.getHeadOfCommittee())){
             return HEAD_OF_COMMITTEE;
         }
+        lecturer.addCommittee(committee);
         return committee.addLecturerToCommittee(lecturer);
+
 
     }
 
@@ -126,6 +128,77 @@ public class College {
         return sum / numOfLecturers;
     }
 
+
+    public CollegeActionStatus removeLecturer(String committeeName, String lecturerName) {
+        Committee committee = findCommitteeByName(committeeName);
+        Lecturer lecturer = findLecturerByName(lecturerName);
+        if (committee == null) {
+            return COMMITTEE_NOT_EXIST;
+        }
+        if (lecturer == null) {
+            return LECTURER_NOT_EXIST;
+        }
+        if (committee.getHeadOfCommittee().equals(lecturer)){
+            return CAN_NOT_REMOVE;
+        }
+        if (Util.checkIfExistLecturerCommittee(committee,lecturerName) != LECTURER_EXIST){
+            return LECTURER_NOT_EXIST;
+        }
+        int indexRemove = -1;
+        int size = committee.getLecturerInCommitteeNum();
+        Lecturer [] lecturers = committee.getLecturerInCommittee();
+        for (int i = 0; i < size; i++) {
+            if (lecturers[i].equals(lecturer)){
+                indexRemove = i;
+                break;
+            }
+        }
+        Lecturer [] newLecturers = new Lecturer[size-1];
+        for (int i = 0, j =0 ; i < size; i++) {
+            if (i != indexRemove){
+                newLecturers[j++] = lecturers[i];
+            }
+        }
+        lecturer.setCommitteeInLecturer(committee);
+        committee.setLecturerInCommittee(newLecturers);
+        committee.decreaseNumOfLecturers();
+        return SUCCESS;
+
+    }
+
+    public CollegeActionStatus updateHeadCommitte(String committeeName, String newHeadName) {
+        Committee committee = findCommitteeByName(committeeName);
+        Lecturer lecturer = findLecturerByName(newHeadName);
+        if (committee == null) {
+            return COMMITTEE_NOT_EXIST;
+        }
+        if (lecturer == null) {
+            return LECTURER_NOT_EXIST;
+        }
+
+        if (lecturer.getDegree() == FIRSTDEGREE || lecturer.getDegree() == Degree.SECONDDEGREE) {
+            return DEGREE_NOT_VALID;
+        }
+        committee.setHeadOfCommittee(lecturer);
+        return SUCCESS;
+    }
+
+    public CollegeActionStatus addLecturerDepartment(String departmentName, String lecturerName) {
+        Lecturer lecturer = findLecturerByName(lecturerName);
+        Department department = findDepartmentByName(departmentName);
+        if (department == null) {
+            return DEPARTMENTS_NOT_EXIST;
+        }
+        if (lecturer == null){
+            return LECTURER_NOT_EXIST;
+        }
+        if (lecturer.getDepartment() != null){
+            return HAS_DEPARTMENT;
+        }
+        return lecturer.addDepartment(department);
+
+    }
+
     public Committee[] getCommitteeNames() {
         return committeeNames;
     }
@@ -150,52 +223,4 @@ public class College {
         return numOfDepartments;
     }
 
-
-
-
-    public CollegeActionStatus removeLecturer(String committeeName, String lecturerName) {
-        Committee committee = findCommitteeByName(committeeName);
-        Lecturer lecturer = findLecturerByName(lecturerName);
-        if (committee == null) {
-            return COMMITTEE_NOT_EXIST;
-        }
-        if (lecturer == null) {
-            return LECTURER_NOT_EXIST;
-        }
-        if (committee.getHeadOfCommittee().equals(lecturer)){
-            return CAN_NOT_REMOVE;
-        }
-        if (Util.checkIfExistLecturerCommittee(committee,lecturerName) != LECTURER_EXIST){
-            return LECTURER_NOT_EXIST;
-        }
-        Committee newCommittee = new Committee(committee);
-        return SUCCESS;
-
 }
-
-    public CollegeActionStatus updateHeadCommitte(String committeeName, String newHeadName) {
-        Committee committee = findCommitteeByName(committeeName);
-        Lecturer lecturer = findLecturerByName(newHeadName);
-        if (committee == null) {
-            return COMMITTEE_NOT_EXIST;
-        }
-        if (lecturer == null) {
-            return LECTURER_NOT_EXIST;
-        }
-
-        if (lecturer.getDegree() == FIRSTDEGREE || lecturer.getDegree() == Degree.SECONDDEGREE) {
-            return DEGREE_NOT_VALID;
-        }
-        committee.setHeadOfCommittee(lecturer);
-        return SUCCESS;
-    }
-//    @Override
-//    public String toString() {
-//        return "College{" +
-//                "name='" + name + '\'' +
-//                ", lecturerNames=" + Arrays.toString(lecturerNames) +
-//                ", committeeNames=" + Arrays.toString(committeeNames) +
-//                ", studyDepartmentNames=" + Arrays.toString(departmentsNames) +
-//                '}';
-//    }
-    }

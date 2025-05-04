@@ -10,7 +10,9 @@ public enum CollegeActionStatus {
     COMMITTEE_EXIST("committee already exist"),
     COMMITTEE_NOT_EXIST("committee not exist"),
     DEGREE_NOT_VALID("you must be a doctor/professor"),
-    CAN_NOT_REMOVE("not possible to remove");
+    CAN_NOT_REMOVE("not possible to remove"),
+    HAS_DEPARTMENT("lecturer already has department"),
+    SUCCESS_NO_DEPARTMENT("lecturer added without department");
 
     private final String description;
 

@@ -17,13 +17,12 @@ public class Committee {
         lecturerInCommittee = new Lecturer[0];
     }
 
-    public Committee(Committee committee) {
-        committee.lecturerInCommittee = Arrays.copyOf(lecturerInCommittee, lecturerInCommitteeNum-1);
-        committee.lecturerInCommitteeNum--;
-    }
-
     public void setHeadOfCommittee(Lecturer newHead) {
         this.headOfCommittee = newHead;
+    }
+
+    public void setLecturerInCommittee(Lecturer[] lecturerInCommittee) {
+        this.lecturerInCommittee = lecturerInCommittee;
     }
 
     public Lecturer getHeadOfCommittee() {
@@ -37,7 +36,9 @@ public class Committee {
         return SUCCESS;
 
     }
-
+    public void decreaseNumOfLecturers() {
+        lecturerInCommitteeNum--;
+    }
     public int getLecturerInCommitteeNum() {
         return lecturerInCommitteeNum;
     }
@@ -65,5 +66,7 @@ public class Committee {
 
         return sb.toString();
     }
+
+
 }
 

@@ -39,12 +39,14 @@ public class Main {
                 case 8 ->averageSalaryDepartment(college);
                 case 9 ->detailsLecturer(college);
                 case 10 ->detailsCommittee(college);
+                case 11 ->addLecturerToDepartment(college);
                 default -> System.out.println("invalid option please choose again");
             }
 
         } while(userChoose != 0);
 
     }
+
 
     private static void printMenu() {
         System.out.println("Menu: " +
@@ -59,45 +61,46 @@ public class Main {
                 "\n  7) Display the average salary of the lecturers in college " +
                 "\n  8) Display the average salary of the lecturers in a specific department" +
                 "\n  9) Display the full details of the lecturers" +
-                "\n 10) Display the full details of all the committees" );
+                "\n 10) Display the full details of all the committees" +
+                "\n 11) Add department to lecturer" );
 
     }
 
 
 
     public static void addLecturer(College college) {
-//        CollegeActionStatus check;
-//        String name;
-//        s.nextLine();
-//        do {
-//
-//            System.out.println(" please enter lecturer name");
-//            name = s.nextLine();
-//            check = Util.checkIfExistLecturer(college,name);
-//            if (check != SUCCESS){
-//                System.out.println(check);
-//            }
-//        } while (check != SUCCESS);
-//        System.out.println(" please enter lecturer id");
-//        String id = s.nextLine();
-//        System.out.println(" please enter lecturer salary");
-//        double salary = s.nextDouble();
-//        s.nextLine();
-//        System.out.println(" please enter lecturer degree name");
-//        String degreeName = s.nextLine();
-//        System.out.println("Please enter lecturer degree (choose from):");
-//        for (Degree d : Degree.values()) {
-//            System.out.println("- " + d);
-//        }
-//        Degree degree = Degree.valueOf(s.next().toUpperCase());
-//        s.nextLine();
-//        System.out.println(" please enter lecturer department / leave blank if does not have");
-//        String department = s.nextLine();
-//        System.out.println(college.addLecturer(name,id,salary,degreeName,degree,department));
-        System.out.println(college.addLecturer("gal", "318915139", 10000 , "kaki" , DOCTOR,"math"));
-        System.out.println(college.addLecturer("sami", "287663228", 7000 , "pipi" , FIRSTDEGREE,"pizi"));
-        System.out.println(college.addLecturer("ori", "167188188", 5500 , "shilshul" , FIRSTDEGREE,"sport"));
-        System.out.println(college.addLecturer("dor", "344553139", 12000 , "samim" , PROFESSOR,"math"));
+        CollegeActionStatus check;
+        String name;
+        s.nextLine();
+        do {
+
+            System.out.println(" please enter lecturer name");
+            name = s.nextLine();
+            check = Util.checkIfExistLecturer(college,name);
+            if (check != SUCCESS){
+                System.out.println(check);
+            }
+        } while (check != SUCCESS);
+        System.out.println(" please enter lecturer id");
+        String id = s.nextLine();
+        System.out.println(" please enter lecturer salary");
+        double salary = s.nextDouble();
+        s.nextLine();
+        System.out.println(" please enter lecturer degree name");
+        String degreeName = s.nextLine();
+        System.out.println("Please enter lecturer degree (choose from):");
+        for (Degree d : Degree.values()) {
+            System.out.println("- " + d);
+        }
+        Degree degree = Degree.valueOf(s.next().toUpperCase());
+        s.nextLine();
+        System.out.println(" please enter lecturer department / leave blank if does not have");
+        String department = s.nextLine();
+        System.out.println(college.addLecturer(name,id,salary,degreeName,degree,department));
+//        System.out.println(college.addLecturer("gal", "318915139", 10000 , "kaki" , DOCTOR,"math"));
+//        System.out.println(college.addLecturer("sami", "287663228", 7000 , "pipi" , FIRSTDEGREE,"pizi"));
+//        System.out.println(college.addLecturer("ori", "167188188", 5500 , "shilshul" , FIRSTDEGREE,"sport"));
+//        System.out.println(college.addLecturer("dor", "344553139", 12000 , "samim" , PROFESSOR,null));
 
     }
 
@@ -216,6 +219,16 @@ public class Main {
             System.out.println(college.getCommitteeNames()[i]);
         }
 
+    }
+
+    private static void addLecturerToDepartment(College college) {
+        s.nextLine();
+        System.out.println("Enter the department:");
+        String departmentName = s.nextLine();
+        System.out.println("Enter the lecturer:");
+        String lecturerName = s.nextLine();
+        CollegeActionStatus check = college.addLecturerDepartment(departmentName,lecturerName);
+        System.out.println(check);
     }
 
 }
