@@ -5,29 +5,27 @@ import java.util.Arrays;
 import static gal_stienberg_ori_schnieder.CollegeActionStatus.*;
 
 public class Util {
-    public static CollegeActionStatus checkIfExistLecturer(College college, String name) {
+    public static void checkIfExistLecturer(College college, String name) throws AlreadyExistException{
         for (int i = 0; i < college.getNumOfLecturers(); i++) {
             if (college.getLecturerNames()[i].getName().equals(name)){
-                return LECTURER_EXIST;
+                throw new AlreadyExistException(name);
             }
         }
-        return SUCCESS;
     }
-    public static CollegeActionStatus checkIfExistDepartment(College college,String name) {
+    public static void checkIfExistDepartment(College college,String name) throws CollegeException{
         for (int i = 0; i < college.getNumOfDepartments(); i++) {
             if (college.getStudyDepartmentNames()[i].getName().equals(name)){
-                return DEPARTMENTS_EXIST;
+                throw new AlreadyExistException(name);
             }
         }
-        return SUCCESS;
+        throw new NotExistException(name);
     }
-    public static CollegeActionStatus checkIfExistCommittee(College college, String name) {
+    public static void checkIfExistCommittee(College college, String name) throws AlreadyExistException{
         for (int i = 0; i < college.getNumOfCommittees(); i++) {
             if (college.getCommitteeNames()[i].getName().equals(name)){
-                return COMMITTEE_EXIST;
+                throw new AlreadyExistException(name);
             }
         }
-        return SUCCESS;
     }
     public static CollegeActionStatus checkIfExistLecturerCommittee(Committee committee, String name) {
         for (int i = 0; i < committee.getLecturerInCommitteeNum(); i++) {

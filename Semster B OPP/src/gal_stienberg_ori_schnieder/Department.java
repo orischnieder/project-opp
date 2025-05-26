@@ -32,7 +32,11 @@ public class Department {
         return name;
     }
 
-
+    @Override
+    public boolean equals(Object obj) {
+        // TODO implement
+        return super.equals(obj);
+    }
 
     @Override
     public String toString() {

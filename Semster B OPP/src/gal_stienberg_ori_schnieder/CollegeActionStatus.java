@@ -1,5 +1,5 @@
 package gal_stienberg_ori_schnieder;
-
+// לעשות חריגה כללית ל"פריט לא נמצא" או חריגה למרצים
 public enum CollegeActionStatus {
     HEAD_OF_COMMITTEE("can't add because already head of committee"),
     SUCCESS("Success"),

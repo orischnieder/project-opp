@@ -62,25 +62,29 @@ public class Main {
                 "\n  8) Display the average salary of the lecturers in a specific department" +
                 "\n  9) Display the full details of the lecturers" +
                 "\n 10) Display the full details of all the committees" +
-                "\n 11) Add department to lecturer" );
-
+                "\n 11) Add department to lecturer" +
+                "\n 12) Article comparison" +
+                "\n 13) Department comparison" +
+                "\n 14) Copy committee") ;
     }
 
 
 
     public static void addLecturer(College college) {
-        CollegeActionStatus check;
+        boolean check;
         String name;
         s.nextLine();
         do {
-
+            check = false;
             System.out.println(" please enter lecturer name");
             name = s.nextLine();
-            check = Util.checkIfExistLecturer(college,name);
-            if (check != SUCCESS){
-                System.out.println(check);
+            try {
+                Util.checkIfExistLecturer(college,name);
+            } catch (AlreadyExistException e) {
+                check = true;
+                System.out.println(e.getMessage());
             }
-        } while (check != SUCCESS);
+        } while (check);
         System.out.println(" please enter lecturer id");
         String id = s.nextLine();
         System.out.println(" please enter lecturer salary");
@@ -92,49 +96,59 @@ public class Main {
         for (Degree d : Degree.values()) {
             System.out.println("- " + d);
         }
+        String [] articles = new String[0];
         Degree degree = Degree.valueOf(s.next().toUpperCase());
+        if (degree == DOCTOR || degree == PROFESSOR) {
+            System.out.println("please enter the number of your published article");
+            int numOfArticles = s.nextInt();
+            articles = new String[numOfArticles];
+            for (int i = 0; i < numOfArticles ; i++) {
+                System.out.println("enter article " + i+ ": ");
+                articles[i] = s.nextLine();
+            }
+        }
+        String faculty;
+        if (degree == PROFESSOR){
+            System.out.println("please enter the name of the faculty your degree's from: ");
+            faculty = s.nextLine();
+        }
+
         s.nextLine();
         System.out.println(" please enter lecturer department / leave blank if does not have");
         String department = s.nextLine();
-        System.out.println(college.addLecturer(name,id,salary,degreeName,degree,department));
-//        System.out.println(college.addLecturer("gal", "318915139", 10000 , "kaki" , DOCTOR,"math"));
-//        System.out.println(college.addLecturer("sami", "287663228", 7000 , "pipi" , FIRSTDEGREE,"pizi"));
-//        System.out.println(college.addLecturer("ori", "167188188", 5500 , "shilshul" , FIRSTDEGREE,"sport"));
-//        System.out.println(college.addLecturer("dor", "344553139", 12000 , "samim" , PROFESSOR,null));
+        try {
+            college.addLecturer(name,id,salary,degreeName,degree,department,articles,faculty);
+        } catch (CollegeException e) {
+            System.out.println(e.getMessage());;
+        }
 
     }
 
     private static void addCommittee(College college) {
-        CollegeActionStatus checkName;
+        boolean check;
         String name;
         s.nextLine();
         do {
-
-            System.out.println(" please enter the committee name");
+            check = false;
+            System.out.println(" please enter committee name");
             name = s.nextLine();
-            checkName = Util.checkIfExistCommittee(college, name);
-            if (checkName != SUCCESS){
-                System.out.println(checkName);
+            try {
+                Util.checkIfExistCommittee(college,name);
+            } catch (AlreadyExistException e) {
+                check = true;
+                System.out.println(e.getMessage());
             }
-        } while (checkName != SUCCESS);
-        boolean checkHead = false;
+        } while (check);
+        boolean checkHead;
         do {
+            checkHead = false;
             System.out.println("please enter the name of the head of the committee:");
             String headOfCommittee = s.nextLine();
-            CollegeActionStatus check = college.addCommitteeCollege(name, headOfCommittee);
-            System.out.println(check);
-            if (check == DEGREE_NOT_VALID) {
-
-                System.out.println("do you wish to enter another name? yes/no?");
-                String userChoose = s.nextLine();
-                if (userChoose.equals("yes")) {
-                    checkHead = true;
-                } else {
-                    break;
-                }
-            }
-            else {
-                checkHead = false;
+            try {
+                college.addCommitteeCollege(name, headOfCommittee);
+            } catch (CollegeException e) {
+                checkHead = true;
+                System.out.println(e.getMessage());;
             }
         }while (checkHead);
     }
@@ -170,28 +184,30 @@ public class Main {
     }
 
     private static void addStudyDepartment(College college) {
-//        CollegeActionStatus check;
-//        String name;
-//        s.nextLine();
-//        do {
-//
-//            System.out.println(" please enter department name");
-//            name = s.nextLine();
-//            check = Util.checkIfExistDepartment(college,name);
-//            if (check != SUCCESS){
-//                System.out.println(check);
-//            }
-//        } while (check != SUCCESS);
-//        System.out.println(" please enter the number of students in the department:");
-//        int numOfStudents = s.nextInt();
-//        System.out.println(college.addDepartment(name,numOfStudents));
-        System.out.println(college.addDepartment("math",120));
-        System.out.println(college.addDepartment("pizi",80));
-        System.out.println(college.addDepartment("sport",200));
+        boolean check;
+        String name;
+        s.nextLine();
+        do {
+            check = false;
+            System.out.println(" please enter department name");
+            name = s.nextLine();
+            try {
+                Util.checkIfExistDepartment(college,name);
+            } catch (CollegeException e) {
+                if (e instanceof AlreadyExistException a) {
+                    check = true;
+                    System.out.println(e.getMessage());
+                }
+            }
+        } while (check);
+        System.out.println(" please enter the number of students in the department:");
+        int numOfStudents = s.nextInt();
+        college.addDepartment(name,numOfStudents);
+
     }
 
     private static void averageSalaryCollege(College college) {
-        System.out.println("The average salary of all the lecturers in the college is: "+ college.averageSalryAll());
+        System.out.println("The average salary of all the lecturers in the college is: "+ college.averageSalaryAll());
     }
 
     private static void averageSalaryDepartment(College college) {
@@ -201,10 +217,16 @@ public class Main {
             System.out.println(college.getStudyDepartmentNames()[i]);
         }
         String name = s.nextLine();
-        if (Util.checkIfExistDepartment(college,name) == DEPARTMENTS_EXIST) {
-            System.out.println("The average salary of the lecturers in department " + name + " is: " + college.averageSalaryDepartment(name));
-        }else {
-            System.out.println(DEPARTMENTS_NOT_EXIST);
+        try {
+            Util.checkIfExistDepartment(college,name);
+        }catch (CollegeException e) {
+            if (e instanceof NotExistException a){
+                System.out.println(a.getMessage());
+            }
+            else{
+                System.out.println("The average salary of the lecturers in department " + name + " is: "
+                        + college.averageSalaryDepartment(name));
+            }
         }
     }
 

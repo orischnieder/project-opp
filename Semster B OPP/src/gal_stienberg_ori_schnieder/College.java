@@ -1,8 +1,6 @@
 package gal_stienberg_ori_schnieder;
 
 
-import java.util.Arrays;
-
 import static gal_stienberg_ori_schnieder.CollegeActionStatus.*;
 import static gal_stienberg_ori_schnieder.Degree.FIRSTDEGREE;
 
@@ -23,45 +21,45 @@ public class College {
 
     }
 
-    public CollegeActionStatus addLecturer(String name, String id, double salary, String degreeName, Degree degree, String department) {
+    public void addLecturer(String name, String id, double salary, String degreeName, Degree degree, String department, String[] articles,String faculty) throws CollegeException{
         Lecturer lecturer;
         Department tempDepartment = findDepartmentByName(department);
         if (tempDepartment == null){
-            lecturer = new Lecturer(name,id,degreeName,degree,salary);
+            lecturer = new Lecturer(name,id,degreeName,degree,salary,articles,faculty);
         }
         else {
-            lecturer = new Lecturer(name,id,degreeName,degree,salary,tempDepartment);
+            lecturer = new Lecturer(name,id,degreeName,degree,salary,tempDepartment,articles,faculty);
             tempDepartment.addLecturerToDepartment(lecturer);
         }
         if (numOfLecturers == lecturerNames.length){
             lecturerNames = (Lecturer[]) Util.resizeArr(lecturerNames);
         }
         lecturerNames[numOfLecturers++] = lecturer;
-        return tempDepartment == null ? SUCCESS_NO_DEPARTMENT : SUCCESS;
+        if (tempDepartment == null){
+            throw new NoDepartmentException();
+        }
     }
 
-    public CollegeActionStatus addDepartment(String name,int numOfStudents) {
+    public void addDepartment(String name,int numOfStudents) {
         Department department = new Department(name,numOfStudents);
         if (numOfDepartments == departmentsNames.length){
             departmentsNames = (Department[]) Util.resizeArr(departmentsNames);
         }
         departmentsNames[numOfDepartments++] = department;
-        return SUCCESS;
     }
 
-    public CollegeActionStatus addCommitteeCollege(String name,String headOfCommittee) {
+    public void addCommitteeCollege(String name,String headOfCommittee) throws CollegeException{
         Lecturer lecturer = findLecturerByName(headOfCommittee);
         if (lecturer == null){
-            return LECTURER_NOT_EXIST;
+            throw new NotExistException(headOfCommittee);
         } else if (lecturer.getDegree() == FIRSTDEGREE || lecturer.getDegree() == Degree.SECONDDEGREE) {
-            return DEGREE_NOT_VALID;
+            throw new DegreeNotValidException();
         }
         Committee committee = new Committee(name,lecturer);
         if (numOfCommittees == committeeNames.length){
             committeeNames = (Committee[]) Util.resizeArr(committeeNames);
         }
         committeeNames[numOfCommittees++] = committee;
-        return SUCCESS;
     }
 
     public CollegeActionStatus addLecturerToCommittee(String nameCommittee,String nameLecturer) {
@@ -120,7 +118,7 @@ public class College {
         return sum / temp.getLecturersInDepartmentNum();
     }
 
-    public double averageSalryAll() {
+    public double averageSalaryAll() {
         double sum = 0;
         for (int i = 0; i < numOfLecturers; i++) {
             sum += lecturerNames[i].getSalary();
@@ -222,5 +220,9 @@ public class College {
     public int getNumOfDepartments() {
         return numOfDepartments;
     }
-
+    @Override
+    public boolean equals(Object obj) {
+        // TODO implement
+        return super.equals(obj);
+    }
 }

@@ -8,6 +8,8 @@ enum Degree{
 
 public class Lecturer {
 
+    private String [] Articles;
+    private String faculty;
     private String name;
     private String id;
     private String degreeName;
@@ -18,7 +20,7 @@ public class Lecturer {
     private int committeesPartOfNum;
 
 
-    public Lecturer(String name,String id, String degreeName,Degree degree, double salary) {
+    public Lecturer(String name,String id, String degreeName,Degree degree, double salary,String[] Articles) {
         this.id = id;
         this.name = name;
         this.degreeName = degreeName;
@@ -27,7 +29,7 @@ public class Lecturer {
         committeesPartOf = new Committee[0];
     }
 
-    public Lecturer(String name, String id, String degreeName, Degree degree, double salary, Department tempDepartment) {
+    public Lecturer(String name, String id, String degreeName, Degree degree, double salary, Department tempDepartment,String[] Articles) {
         this.id = id;
         this.name = name;
         this.degreeName = degreeName;
@@ -79,6 +81,12 @@ public class Lecturer {
 
     public Degree getDegree(){
         return degree;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        // TODO implement
+        return super.equals(obj);
     }
     @Override
     public String toString() {
