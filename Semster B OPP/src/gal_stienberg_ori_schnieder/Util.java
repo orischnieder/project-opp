@@ -1,18 +1,22 @@
 package gal_stienberg_ori_schnieder;
 
+import gal_stienberg_ori_schnieder.exceptions.AlreadyExistException;
+import gal_stienberg_ori_schnieder.exceptions.CollegeException;
+import gal_stienberg_ori_schnieder.exceptions.NotExistException;
+
 import java.util.Arrays;
 
 import static gal_stienberg_ori_schnieder.CollegeActionStatus.*;
 
 public class Util {
-    public static void checkIfExistLecturer(College college, String name) throws AlreadyExistException{
+    public static void checkIfExistLecturer(College college, String name) throws AlreadyExistException {
         for (int i = 0; i < college.getNumOfLecturers(); i++) {
             if (college.getLecturerNames()[i].getName().equals(name)){
                 throw new AlreadyExistException(name);
             }
         }
     }
-    public static void checkIfExistDepartment(College college,String name) throws CollegeException{
+    public static void checkIfExistDepartment(College college,String name) throws CollegeException {
         for (int i = 0; i < college.getNumOfDepartments(); i++) {
             if (college.getStudyDepartmentNames()[i].getName().equals(name)){
                 throw new AlreadyExistException(name);
@@ -27,13 +31,13 @@ public class Util {
             }
         }
     }
-    public static CollegeActionStatus checkIfExistLecturerCommittee(Committee committee, String name) {
+    public static void checkIfExistLecturerCommittee(Committee committee, String name) throws CollegeException{
         for (int i = 0; i < committee.getLecturerInCommitteeNum(); i++) {
             if (committee.getLecturerInCommittee()[i].getName().equals(name)){
-                return LECTURER_EXIST;
+                throw new AlreadyExistException(name);
             }
         }
-        return LECTURER_NOT_EXIST;
+        throw new NotExistException(name);
     }
 
     public static Object[] resizeArr(Object[] arr){

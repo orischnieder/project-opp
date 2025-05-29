@@ -1,9 +1,9 @@
 package gal_stienberg_ori_schnieder;
-import java.util.Arrays;
-import java.util.Scanner;
+import gal_stienberg_ori_schnieder.exceptions.AlreadyExistException;
+import gal_stienberg_ori_schnieder.exceptions.CollegeException;
+import gal_stienberg_ori_schnieder.exceptions.NotExistException;
 
-import static gal_stienberg_ori_schnieder.CollegeActionStatus.*;
-import static gal_stienberg_ori_schnieder.Degree.*;
+import java.util.Scanner;
 
 /*names: gal stienberg & ori schnieder
 * id gal:318915139
@@ -96,28 +96,12 @@ public class Main {
         for (Degree d : Degree.values()) {
             System.out.println("- " + d);
         }
-        String [] articles = new String[0];
         Degree degree = Degree.valueOf(s.next().toUpperCase());
-        if (degree == DOCTOR || degree == PROFESSOR) {
-            System.out.println("please enter the number of your published article");
-            int numOfArticles = s.nextInt();
-            articles = new String[numOfArticles];
-            for (int i = 0; i < numOfArticles ; i++) {
-                System.out.println("enter article " + i+ ": ");
-                articles[i] = s.nextLine();
-            }
-        }
-        String faculty;
-        if (degree == PROFESSOR){
-            System.out.println("please enter the name of the faculty your degree's from: ");
-            faculty = s.nextLine();
-        }
-
         s.nextLine();
         System.out.println(" please enter lecturer department / leave blank if does not have");
         String department = s.nextLine();
         try {
-            college.addLecturer(name,id,salary,degreeName,degree,department,articles,faculty);
+            college.addLecturer(name,id,salary,degreeName,degree,department);
         } catch (CollegeException e) {
             System.out.println(e.getMessage());;
         }
@@ -159,8 +143,11 @@ public class Main {
         String nameCommittee = s.nextLine();
         System.out.println("please enter the name of the lecturer you want to add to the Committee:");
         String lecturerToAdd = s.nextLine();
-        CollegeActionStatus check = college.addLecturerToCommittee(nameCommittee,lecturerToAdd);
-        System.out.println(check);
+        try {
+            college.addLecturerToCommittee(nameCommittee,lecturerToAdd);
+        } catch (CollegeException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void updateHeadOfCommittee(College college) {
@@ -169,8 +156,11 @@ public class Main {
         String committeeName = s.nextLine();
         System.out.println("Please enter the name of the new head of the committee:");
         String newHeadName = s.nextLine();
-        CollegeActionStatus check = college.updateHeadCommitte(committeeName,newHeadName);
-        System.out.println(check);
+        try {
+            college.updateHeadCommitte(committeeName,newHeadName);
+        } catch (CollegeException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void removeLecturerCommittee(College college) {
@@ -179,8 +169,11 @@ public class Main {
         String committeeName = s.nextLine();
         System.out.println("Please enter the name of the lecturer to remove:");
         String lecturerName = s.nextLine();
-        CollegeActionStatus check = college.removeLecturer(committeeName,lecturerName);
-        System.out.println(check);
+        try {
+            college.removeLecturer(committeeName,lecturerName);
+        } catch (CollegeException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void addStudyDepartment(College college) {
@@ -249,8 +242,11 @@ public class Main {
         String departmentName = s.nextLine();
         System.out.println("Enter the lecturer:");
         String lecturerName = s.nextLine();
-        CollegeActionStatus check = college.addLecturerDepartment(departmentName,lecturerName);
-        System.out.println(check);
+        try {
+            college.addLecturerDepartment(departmentName,lecturerName);
+        } catch (CollegeException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }

@@ -9,6 +9,7 @@ enum Degree{
 public class Lecturer {
 
     private String [] Articles;
+    private int numOfArticles;
     private String faculty;
     private String name;
     private String id;
@@ -20,7 +21,7 @@ public class Lecturer {
     private int committeesPartOfNum;
 
 
-    public Lecturer(String name,String id, String degreeName,Degree degree, double salary,String[] Articles) {
+    public Lecturer(String name,String id, String degreeName,Degree degree, double salary) {
         this.id = id;
         this.name = name;
         this.degreeName = degreeName;
@@ -29,7 +30,7 @@ public class Lecturer {
         committeesPartOf = new Committee[0];
     }
 
-    public Lecturer(String name, String id, String degreeName, Degree degree, double salary, Department tempDepartment,String[] Articles) {
+    public Lecturer(String name, String id, String degreeName, Degree degree, double salary, Department tempDepartment) {
         this.id = id;
         this.name = name;
         this.degreeName = degreeName;
@@ -44,9 +45,27 @@ public class Lecturer {
         }
         committeesPartOf[committeesPartOfNum++] = committee;
     }
-    public CollegeActionStatus addDepartment(Department department) {
+    public int getNumOfArticles() {
+        return numOfArticles;
+    }
+    public String[] getArticles() {
+        return Articles;
+    }
+
+    public void setArticles(String[] articles) {
+        Articles = articles;
+    }
+
+    public String getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
+    }
+
+    public void addDepartment(Department department) {
         this.department = department;
-        return SUCCESS;
     }
 
     public void setCommitteeInLecturer(Committee committee) {

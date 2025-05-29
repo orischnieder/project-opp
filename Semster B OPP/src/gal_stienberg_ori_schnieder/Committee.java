@@ -1,9 +1,23 @@
 package gal_stienberg_ori_schnieder;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 import static gal_stienberg_ori_schnieder.CollegeActionStatus.SUCCESS;
+class compareByNumOfLecturer implements Comparator<Committee>{
 
+    @Override
+    public int compare(Committee o1, Committee o2) {
+        return Integer.compare(o1.getLecturerInCommitteeNum(), o2.getLecturerInCommitteeNum());
+    }
+}
+class compareByNumOfArticles implements Comparator<Committee>{
+
+    @Override
+    public int compare(Committee o1, Committee o2) {
+        return Integer.compare(o1.getNumOfArticles(), o2.getNumOfArticles());
+    }
+}
 public class Committee {
     private String name;
     private Lecturer headOfCommittee;
@@ -16,7 +30,13 @@ public class Committee {
         this.headOfCommittee =lecturer;
         lecturerInCommittee = new Lecturer[0];
     }
-
+    public int getNumOfArticles(){
+        int sum = 0;
+        for (int i = 0; i < lecturerInCommitteeNum; i++) {
+            sum += lecturerInCommittee[i].getNumOfArticles();
+        }
+        return sum;
+    }
     public void setHeadOfCommittee(Lecturer newHead) {
         this.headOfCommittee = newHead;
     }
@@ -28,13 +48,11 @@ public class Committee {
     public Lecturer getHeadOfCommittee() {
         return headOfCommittee;
     }
-    public  CollegeActionStatus addLecturerToCommittee(Lecturer lecturer) {
+    public  void addLecturerToCommittee(Lecturer lecturer) {
         if (lecturerInCommitteeNum == lecturerInCommittee.length){
             lecturerInCommittee = (Lecturer[]) Util.resizeArr(lecturerInCommittee);
         }
         lecturerInCommittee[lecturerInCommitteeNum++] = lecturer;
-        return SUCCESS;
-
     }
     public void decreaseNumOfLecturers() {
         lecturerInCommitteeNum--;

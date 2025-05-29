@@ -1,4 +1,4 @@
-package gal_stienberg_ori_schnieder;
+package gal_stienberg_ori_schnieder.exceptions;
 
 public class CollegeException extends Exception{
     private static final String PRE_MESSAGE= "Error: ";
