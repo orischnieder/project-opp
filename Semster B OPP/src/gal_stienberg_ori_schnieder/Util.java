@@ -6,8 +6,6 @@ import gal_stienberg_ori_schnieder.exceptions.NotExistException;
 
 import java.util.Arrays;
 
-import static gal_stienberg_ori_schnieder.CollegeActionStatus.*;
-
 public class Util {
     public static void checkIfExistLecturer(College college, String name) throws AlreadyExistException {
         for (int i = 0; i < college.getNumOfLecturers(); i++) {
@@ -34,7 +32,7 @@ public class Util {
     public static void checkIfExistLecturerCommittee(Committee committee, String name) throws CollegeException{
         for (int i = 0; i < committee.getLecturerInCommitteeNum(); i++) {
             if (committee.getLecturerInCommittee()[i].getName().equals(name)){
-                throw new AlreadyExistException(name);
+                return;
             }
         }
         throw new NotExistException(name);

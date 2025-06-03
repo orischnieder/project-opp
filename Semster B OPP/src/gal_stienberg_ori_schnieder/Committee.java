@@ -1,24 +1,22 @@
 package gal_stienberg_ori_schnieder;
 
-import java.util.Arrays;
 import java.util.Comparator;
 
-import static gal_stienberg_ori_schnieder.CollegeActionStatus.SUCCESS;
-class compareByNumOfLecturer implements Comparator<Committee>{
+class CompareByNumOfLecturer implements Comparator<Committee>{
 
     @Override
     public int compare(Committee o1, Committee o2) {
         return Integer.compare(o1.getLecturerInCommitteeNum(), o2.getLecturerInCommitteeNum());
     }
 }
-class compareByNumOfArticles implements Comparator<Committee>{
+class CompareByNumOfArticles implements Comparator<Committee>{
 
     @Override
     public int compare(Committee o1, Committee o2) {
         return Integer.compare(o1.getNumOfArticles(), o2.getNumOfArticles());
     }
 }
-public class Committee {
+public class Committee implements Cloneable{
     private String name;
     private Lecturer headOfCommittee;
     private Lecturer[] lecturerInCommittee;
@@ -33,7 +31,11 @@ public class Committee {
     public int getNumOfArticles(){
         int sum = 0;
         for (int i = 0; i < lecturerInCommitteeNum; i++) {
-            sum += lecturerInCommittee[i].getNumOfArticles();
+            if (lecturerInCommittee[i] instanceof Professor professor){
+                sum += professor.getNumOfArticles();
+            }
+            if (lecturerInCommittee[i] instanceof Doctor doctor)
+                sum += doctor.getNumOfArticles();
         }
         return sum;
     }
@@ -65,6 +67,10 @@ public class Committee {
         return lecturerInCommittee;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
@@ -72,8 +78,13 @@ public class Committee {
 
     @Override
     public boolean equals(Object obj) {
-        // TODO implement
-        return super.equals(obj);
+        if (this == obj){
+            return true;
+        }
+        if (obj instanceof Committee committee){
+            return name.equals(committee.name);
+        }
+        return false;
     }
     @Override
     public String toString() {
@@ -90,7 +101,20 @@ public class Committee {
 
         return sb.toString();
     }
-
+    @Override
+    public Committee clone() throws CloneNotSupportedException{
+        Committee clone = (Committee) super.clone();
+        clone.headOfCommittee = headOfCommittee.clone();
+        clone.headOfCommittee.addCommittee(clone);
+        clone.lecturerInCommittee = new Lecturer[lecturerInCommittee.length];
+        for (int i = 0; i < lecturerInCommitteeNum; i++) {
+            Lecturer lClone = lecturerInCommittee[i].clone();
+            lClone.addCommittee(clone);
+            clone.lecturerInCommittee[i] = lClone;
+        }
+        clone.lecturerInCommitteeNum = lecturerInCommitteeNum;
+        return clone;
+    }
 
 }
 

@@ -3,8 +3,7 @@ package gal_stienberg_ori_schnieder;
 
 import gal_stienberg_ori_schnieder.exceptions.*;
 
-import static gal_stienberg_ori_schnieder.CollegeActionStatus.*;
-import static gal_stienberg_ori_schnieder.Degree.FIRSTDEGREE;
+import static gal_stienberg_ori_schnieder.Degree.*;
 
 public class College {
     private String name;
@@ -23,14 +22,30 @@ public class College {
 
     }
 
-    public void addLecturer(String name, String id, double salary, String degreeName, Degree degree, String department) throws CollegeException {
+    public void addLecturer(String name, String id, double salary, String degreeName, Degree degree, String department,String[]articles,String faculty) throws CollegeException {
         Lecturer lecturer;
         Department tempDepartment = findDepartmentByName(department);
         if (tempDepartment == null){
-            lecturer = new Lecturer(name,id,degreeName,degree,salary);
+            if (degree == DOCTOR){
+                lecturer = new Doctor(name,id,degreeName,degree,salary,articles);
+            }
+            else if (degree == PROFESSOR){
+                lecturer = new Professor(name,id,degreeName,degree,salary,articles,faculty);
+            }
+            else {
+                lecturer = new Lecturer(name,id,degreeName,degree,salary);
+            }
         }
         else {
-            lecturer = new Lecturer(name,id,degreeName,degree,salary,tempDepartment);
+            if (degree == DOCTOR){
+                lecturer = new Doctor(name,id,degreeName,degree,salary,tempDepartment,articles);
+            }
+            else if (degree == PROFESSOR){
+                lecturer = new Professor(name,id,degreeName,degree,salary,tempDepartment,articles,faculty);
+            }
+            else {
+                lecturer = new Lecturer(name,id,degreeName,degree,salary,tempDepartment);
+            }
             tempDepartment.addLecturerToDepartment(lecturer);
         }
         if (numOfLecturers == lecturerNames.length){
@@ -165,7 +180,7 @@ public class College {
 
     }
 
-    public void updateHeadCommitte(String committeeName, String newHeadName) throws CollegeException{
+    public void updateHeadCommittee(String committeeName, String newHeadName) throws CollegeException{
         Committee committee = findCommitteeByName(committeeName);
         Lecturer lecturer = findLecturerByName(newHeadName);
         if (committee == null) {
@@ -196,7 +211,65 @@ public class College {
         lecturer.addDepartment(department);
 
     }
+    public void copyCommittee(String committeeName) throws CollegeException, CloneNotSupportedException {
+        Committee committee = findCommitteeByName(committeeName);
+        if (committee == null) {
+            throw new NotExistException(committeeName);
+        }
+        Committee newCommittee = committee.clone();
+        newCommittee.setName("new"+newCommittee.getName());
+        if (numOfCommittees == committeeNames.length){
+            committeeNames = (Committee[]) Util.resizeArr(committeeNames);
+        }
+        committeeNames[numOfCommittees++] = newCommittee;
+    }
 
+
+
+    public int compareCommitteeByLecturer(String committee1, String committee2) throws CollegeException{
+        Committee c1 = findCommitteeByName(committee1);
+        Committee c2 = findCommitteeByName(committee2);
+        if (c1 == null){
+            throw new NotExistException(committee1);
+        }
+        if (c2 == null){
+            throw new NotExistException(committee2);
+        }
+        CompareByNumOfLecturer cmp = new CompareByNumOfLecturer();
+        return cmp.compare(c1,c2);
+
+    }
+
+    public int compareCommitteeByArticles(String committee1, String committee2) throws CollegeException{
+        Committee c1 = findCommitteeByName(committee1);
+        Committee c2 = findCommitteeByName(committee2);
+        if (c1 == null){
+            throw new NotExistException(committee1);
+        }
+        if (c2 == null){
+            throw new NotExistException(committee2);
+        }
+        CompareByNumOfArticles cmp = new CompareByNumOfArticles();
+        return cmp.compare(c1,c2);
+    }
+
+    public int compareDocProf(String l1, String l2) throws CollegeException{
+        Lecturer lecturer1 = findLecturerByName(l1);
+        Lecturer lecturer2 = findLecturerByName(l2);
+        if (lecturer1 == null){
+            throw new NotExistException(l1);
+        }
+        if (lecturer2 == null){
+            throw new NotExistException(l2);
+        }
+        CompareDocProf cmp = new CompareDocProf();
+        if (lecturer1 instanceof Doctor doctor1 && lecturer2 instanceof Doctor doctor2){
+            return cmp.compare(doctor1,doctor2);
+        }
+        else {
+            throw new DegreeNotValidException();
+        }
+    }
     public Committee[] getCommitteeNames() {
         return committeeNames;
     }
@@ -219,10 +292,5 @@ public class College {
 
     public int getNumOfDepartments() {
         return numOfDepartments;
-    }
-    @Override
-    public boolean equals(Object obj) {
-        // TODO implement
-        return super.equals(obj);
     }
 }

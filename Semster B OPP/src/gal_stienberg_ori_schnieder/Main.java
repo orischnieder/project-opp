@@ -1,9 +1,12 @@
 package gal_stienberg_ori_schnieder;
 import gal_stienberg_ori_schnieder.exceptions.AlreadyExistException;
 import gal_stienberg_ori_schnieder.exceptions.CollegeException;
+import gal_stienberg_ori_schnieder.exceptions.NoDepartmentException;
 import gal_stienberg_ori_schnieder.exceptions.NotExistException;
 
 import java.util.Scanner;
+
+import static gal_stienberg_ori_schnieder.Degree.*;
 
 /*names: gal stienberg & ori schnieder
 * id gal:318915139
@@ -40,13 +43,15 @@ public class Main {
                 case 9 ->detailsLecturer(college);
                 case 10 ->detailsCommittee(college);
                 case 11 ->addLecturerToDepartment(college);
+                case 12 ->committeeCompare(college);
+                case 13 ->profDocCompare(college);
+                case 14 ->copyCommittee(college);
                 default -> System.out.println("invalid option please choose again");
             }
 
         } while(userChoose != 0);
 
     }
-
 
     private static void printMenu() {
         System.out.println("Menu: " +
@@ -63,12 +68,10 @@ public class Main {
                 "\n  9) Display the full details of the lecturers" +
                 "\n 10) Display the full details of all the committees" +
                 "\n 11) Add department to lecturer" +
-                "\n 12) Article comparison" +
-                "\n 13) Department comparison" +
+                "\n 12) Committee comparison" +
+                "\n 13) Prof/Doc comparison" +
                 "\n 14) Copy committee") ;
     }
-
-
 
     public static void addLecturer(College college) {
         boolean check;
@@ -93,18 +96,47 @@ public class Main {
         System.out.println(" please enter lecturer degree name");
         String degreeName = s.nextLine();
         System.out.println("Please enter lecturer degree (choose from):");
-        for (Degree d : Degree.values()) {
+        for (Degree d : values()) {
             System.out.println("- " + d);
         }
-        Degree degree = Degree.valueOf(s.next().toUpperCase());
+        Degree degree = null;
+        boolean userInput;
+        do {
+            userInput = false;
+            try {
+                degree = valueOf(s.next().toUpperCase());
+
+            }catch (IllegalArgumentException e){
+                System.out.println("Invalid degree type please enter again:");
+                userInput = true;
+            }
+        }while (userInput);
         s.nextLine();
         System.out.println(" please enter lecturer department / leave blank if does not have");
         String department = s.nextLine();
-        try {
-            college.addLecturer(name,id,salary,degreeName,degree,department);
-        } catch (CollegeException e) {
-            System.out.println(e.getMessage());;
+        String faculty = null;
+        String[] articles = new String[0];
+        if (degree == DOCTOR || degree == PROFESSOR) {
+            System.out.println("please enter the number of your published article");
+            int numOfArticles = s.nextInt();
+            s.nextLine();
+            articles = new String[numOfArticles];
+            for (int i = 0; i < numOfArticles ; i++) {
+                System.out.println("enter article " + (i+1)+ ": ");
+                articles[i] = s.nextLine();
+            }
+            if (degree == PROFESSOR){
+                System.out.println("please enter the name of the faculty your degree's from: ");
+                faculty = s.nextLine();
+            }
         }
+        try {
+            college.addLecturer(name,id,salary,degreeName,degree,department,articles,faculty);
+        } catch (CollegeException e) {
+            System.out.println(e.getMessage());
+        }
+
+
 
     }
 
@@ -157,7 +189,7 @@ public class Main {
         System.out.println("Please enter the name of the new head of the committee:");
         String newHeadName = s.nextLine();
         try {
-            college.updateHeadCommitte(committeeName,newHeadName);
+            college.updateHeadCommittee(committeeName,newHeadName);
         } catch (CollegeException e) {
             System.out.println(e.getMessage());
         }
@@ -249,4 +281,80 @@ public class Main {
         }
     }
 
+    private static void copyCommittee(College college) {
+        s.nextLine();
+        System.out.println("Please enter a committee to copy:");
+        String committeeName = s.nextLine();
+        try {
+            college.copyCommittee(committeeName);
+        } catch (CollegeException | CloneNotSupportedException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void committeeCompare(College college) {
+        s.nextLine();
+        System.out.println("Please enter a committee");
+        String committee1 = s.nextLine();
+        System.out.println("Please enter another committee");
+        String committee2 = s.nextLine();
+        System.out.println("Choose which comparison you want:" +
+                " press 1) number of lecturer in committee , or press 2) number of articles");
+        int answer = s.nextInt();
+        int res = 0;
+        if (answer == 1){
+            try {
+                res = college.compareCommitteeByLecturer(committee1,committee2);
+                if (res < 0 ){
+                    System.out.println("committee " +committee1 + " is less then "+committee2);
+                }
+                else if (res > 0 ){
+                    System.out.println("committee " +committee1 + " is more then "+committee2);
+                }else {
+                    System.out.println("committee " +committee1 + " is same as "+committee2);
+                }
+            } catch (CollegeException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        if (answer == 2){
+            try {
+                res = college.compareCommitteeByArticles(committee1,committee2);
+                if (res < 0 ){
+                    System.out.println("committee " +committee1 + " is less then "+committee2);
+                }
+                else if (res > 0 ){
+                    System.out.println("committee " +committee1 + " is more then "+committee2);
+                }else {
+                    System.out.println("committee " +committee1 + " is same as "+committee2);
+                }
+            } catch (CollegeException e) {
+                System.out.println(e.getMessage());
+            }
+
+        }
+
+    }
+
+    private static void profDocCompare(College college) {
+        s.nextLine();
+        System.out.println("Please enter the name of Doc/Prof: ");
+        String l1 = s.nextLine();
+        System.out.println("Please enter another name of Doc/Prof: ");
+        String l2 = s.nextLine();
+        int res = 0;
+        try {
+            res = college.compareDocProf(l1,l2);
+            if (res < 0 ){
+                System.out.println(l1 + " has less articles then "+ l2);
+            }
+            else if (res > 0 ){
+                System.out.println(l1 + " has more articles then "+ l2);
+            }else {
+                System.out.println(l1 + " has the same number of articles as "+ l2);
+            }
+        } catch (CollegeException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

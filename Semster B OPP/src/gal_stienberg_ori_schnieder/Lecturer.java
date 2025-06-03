@@ -1,16 +1,11 @@
 package gal_stienberg_ori_schnieder;
 
-import static gal_stienberg_ori_schnieder.CollegeActionStatus.SUCCESS;
-
 enum Degree{
     FIRSTDEGREE , SECONDDEGREE, DOCTOR , PROFESSOR
 }
 
-public class Lecturer {
+public class Lecturer implements Cloneable{
 
-    private String [] Articles;
-    private int numOfArticles;
-    private String faculty;
     private String name;
     private String id;
     private String degreeName;
@@ -44,24 +39,6 @@ public class Lecturer {
             committeesPartOf = (Committee[]) Util.resizeArr(committeesPartOf);
         }
         committeesPartOf[committeesPartOfNum++] = committee;
-    }
-    public int getNumOfArticles() {
-        return numOfArticles;
-    }
-    public String[] getArticles() {
-        return Articles;
-    }
-
-    public void setArticles(String[] articles) {
-        Articles = articles;
-    }
-
-    public String getFaculty() {
-        return faculty;
-    }
-
-    public void setFaculty(String faculty) {
-        this.faculty = faculty;
     }
 
     public void addDepartment(Department department) {
@@ -104,31 +81,48 @@ public class Lecturer {
 
     @Override
     public boolean equals(Object obj) {
-        // TODO implement
-        return super.equals(obj);
+        if (this == obj){
+            return true;
+        }
+        if (obj instanceof Lecturer lecturer){
+            return name.equals(lecturer.name);
+        }
+        return false;
     }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Lecturer Details: [");
-        sb.append("\"name: ").append(name).append("\", ");
-        sb.append("\"id: ").append(id).append("\", ");
-        sb.append("\"degree name: ").append(degreeName).append("\", ");
-        sb.append("\"degree type: ").append(degree).append("\", ");
+        sb.append("\"name: ").append(name != null ? name : "Unnamed").append("\", ");
+        sb.append("\"id: ").append(id != null ? id : "No ID").append("\", ");
+        sb.append("\"degree name: ").append(degreeName != null ? degreeName : "No Degree Name").append("\", ");
+        sb.append("\"degree type: ").append(degree != null ? degree : "No Degree Type").append("\", ");
         sb.append("\"department: ").append(department != null ? department.getName() : "No Department").append("\", ");
         sb.append("\"salary: ").append(salary).append("\", ");
 
         sb.append("committees: [");
-        for (int i = 0; i < committeesPartOfNum; i++) {
-            sb.append("\"").append(committeesPartOf[i].getName()).append("\"");
-            if (i < committeesPartOfNum - 1) {
-                sb.append(", ");
+        if (committeesPartOfNum == 0) {
+            sb.append("]");
+        } else {
+            for (int i = 0; i < committeesPartOfNum; i++) {
+                if (i > 0) sb.append(", ");
+                sb.append("\"").append(committeesPartOf[i].getName()).append("\"");
             }
+            sb.append("]");
         }
-        sb.append("]]");
-
+        sb.append("]");           // סוגר את המערך החיצוני
         return sb.toString();
     }
 
+    @Override
+    public Lecturer clone() throws CloneNotSupportedException{
+        Lecturer clone = (Lecturer) super.clone();
+        clone.department = (department != null) ? department.clone() : null;
+        clone.committeesPartOf    = new Committee[0];
+        clone.committeesPartOfNum = 0;
+        return clone;
+
+    }
 
 }

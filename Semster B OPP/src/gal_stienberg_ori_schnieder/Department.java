@@ -2,7 +2,7 @@ package gal_stienberg_ori_schnieder;
 
 import java.util.Arrays;
 
-public class Department {
+public class Department implements Cloneable{
     private String name;
     private int numOfStudents;
     private Lecturer[] lecturersInDepartment;
@@ -34,12 +34,22 @@ public class Department {
 
     @Override
     public boolean equals(Object obj) {
-        // TODO implement
-        return super.equals(obj);
+        if (this == obj){
+            return true;
+        }
+        if (obj instanceof Department department){
+            return name.equals(department.name);
+        }
+        return false;
     }
 
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public Department clone() throws CloneNotSupportedException {
+        return (Department) super.clone();
     }
 }
