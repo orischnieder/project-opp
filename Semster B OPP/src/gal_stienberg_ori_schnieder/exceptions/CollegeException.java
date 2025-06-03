@@ -6,3 +6,4 @@ public class CollegeException extends Exception{
         super(PRE_MESSAGE + message);
     }
 }
+

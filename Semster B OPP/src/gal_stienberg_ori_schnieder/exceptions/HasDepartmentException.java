@@ -5,3 +5,4 @@ public class HasDepartmentException extends CollegeException {
         super(" already has a department");
     }
 }
+

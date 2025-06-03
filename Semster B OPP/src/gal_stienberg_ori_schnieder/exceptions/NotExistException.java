@@ -5,3 +5,4 @@ public class NotExistException extends CollegeException {
         super(name+ " does not exist in the system");
     }
 }
+

@@ -101,6 +101,7 @@ public class Committee implements Cloneable{
 
         return sb.toString();
     }
+
     @Override
     public Committee clone() throws CloneNotSupportedException{
         Committee clone = (Committee) super.clone();

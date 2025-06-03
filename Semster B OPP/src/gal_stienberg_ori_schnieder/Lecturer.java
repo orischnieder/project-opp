@@ -16,6 +16,7 @@ public class Lecturer implements Cloneable{
     private int committeesPartOfNum;
 
 
+
     public Lecturer(String name,String id, String degreeName,Degree degree, double salary) {
         this.id = id;
         this.name = name;

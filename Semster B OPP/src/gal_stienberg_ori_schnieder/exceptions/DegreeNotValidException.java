@@ -5,3 +5,4 @@ public class DegreeNotValidException extends CollegeException {
         super(" you must be a DR/PROF ");
     }
 }
+

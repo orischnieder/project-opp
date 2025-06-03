@@ -24,6 +24,7 @@ public class Department implements Cloneable{
         return lecturersInDepartmentNum;
     }
 
+
     public Lecturer[] getLecturersInDepartment() {
         return lecturersInDepartment;
     }

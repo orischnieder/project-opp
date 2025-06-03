@@ -235,6 +235,7 @@ public class Main {
         System.out.println("The average salary of all the lecturers in the college is: "+ college.averageSalaryAll());
     }
 
+
     private static void averageSalaryDepartment(College college) {
         s.nextLine();
         System.out.println("please choose a department please: ");

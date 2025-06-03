@@ -5,3 +5,4 @@ public class AlreadyHeadOfCommitteeException extends CollegeException {
         super(name + " is the head of committee");
     }
 }
+

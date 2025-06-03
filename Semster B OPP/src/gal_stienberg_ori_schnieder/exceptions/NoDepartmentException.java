@@ -5,3 +5,4 @@ public class NoDepartmentException extends CollegeException {
         super(" lecturer created without department");
     }
 }
+

@@ -274,6 +274,7 @@ public class College {
         return committeeNames;
     }
 
+
     public Lecturer[] getLecturerNames() {
         return lecturerNames;
     }

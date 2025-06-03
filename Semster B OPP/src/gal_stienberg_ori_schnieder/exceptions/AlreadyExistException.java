@@ -5,3 +5,4 @@ public class AlreadyExistException extends CollegeException {
         super(name+ " already exist in the system");
     }
 }
+
